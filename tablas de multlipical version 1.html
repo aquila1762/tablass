@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Tablas de Multiplicar</title>
+    <!-- Cargar Tailwind CSS desde el CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración personalizada de Tailwind CSS */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#34D399', // Verde esmeralda
+                        secondary: '#3B82F6', // Azul
+                        accent: '#FBBF24', // Amarillo
+                    },
+                    fontFamily: {
+                        sans: ['Comic Sans MS', 'cursive'],
+                    },
+                },
+            },
+        }
+    </style>
+    <script>
+        // Funciones JavaScript para la lógica de la aplicación
+        let correctas = 0;
+        let incorrectas = 0;
+        let factor1, factor2;
+
+        function generarMultiplicacion() {
+            factor1 = Math.floor(Math.random() * 9) + 1;
+            factor2 = Math.floor(Math.random() * 9) + 1;
+            document.getElementById('multiplicacion').textContent = `${factor1} x ${factor2} =`;
+            document.getElementById('respuesta').value = '';
+            document.getElementById('respuesta').focus();
+        }
+
+        function verificarRespuesta() {
+            const respuestaUsuario = parseInt(document.getElementById('respuesta').value);
+            const respuestaCorrecta = factor1 * factor2;
+            const mensaje = document.getElementById('mensaje');
+
+            if (respuestaUsuario === respuestaCorrecta) {
+                correctas++;
+                mensaje.textContent = '¡Correcto! ¡Bien hecho!';
+                mensaje.className = 'text-primary font-bold mt-2';
+            } else {
+                incorrectas++;
+                mensaje.textContent = `Incorrecto. La respuesta es ${respuestaCorrecta}.`;
+                mensaje.className = 'text-red-500 font-bold mt-2';
+            }
+
+            actualizarPuntuacion();
+            setTimeout(generarMultiplicacion, 2000);
+        }
+
+        function actualizarPuntuacion() {
+            document.getElementById('correctas').textContent = correctas;
+            document.getElementById('incorrectas').textContent = incorrectas;
+        }
+
+        function reiniciarJuego() {
+            correctas = 0;
+            incorrectas = 0;
+            actualizarPuntuacion();
+            generarMultiplicacion();
+            document.getElementById('mensaje').textContent = '';
+        }
+
+        window.onload = generarMultiplicacion;
+    </script>
+</head>
+<body class="bg-blue-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <h1 class="text-3xl font-bold text-secondary mb-4">¡Practica las Tablas de Multiplicar!</h1>
+        <div class="text-2xl mb-4">
+            <span id="multiplicacion"></span>
+            <input type="number" id="respuesta" class="border-b-2 border-secondary w-20 text-center text-xl focus:outline-none" onkeypress="if(event.key === 'Enter') verificarRespuesta()">
+        </div>
+        <button onclick="verificarRespuesta()" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-green-500 transition duration-300">Verificar</button>
+        <p id="mensaje" class="h-8 mt-2"></p>
+        <div class="mt-4">
+            <p class="text-lg">Respuestas correctas: <span id="correctas">0</span></p>
+            <p class="text-lg">Respuestas incorrectas: <span id="incorrectas">0</span></p>
+        </div>
+        <button onclick="reiniciarJuego()" class="mt-4 bg-accent text-white px-4 py-2 rounded-full hover:bg-yellow-500 transition duration-300">Reiniciar</button>
+    </div>
+</body>
+</html>
